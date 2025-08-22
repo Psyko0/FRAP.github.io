@@ -1,0 +1,709 @@
+
+
+:root {
+  --ff-base: "Noto sans JP", sans-serif;
+  --fw-thin: 300;
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-bold: 700;
+  --fw-black: 900;
+}
+p{
+    font-family: var(--ff-base);
+    font-weight: var(--fw-thin);
+}
+.highlight{
+    font-family: var(--ff-base);
+    font-weight: var(--fw-medium);
+}
+
+:root{
+    --accent-color:#d4d4ff;
+}
+/* Palette DARK (base utilisée par tout le CSS) */
+:root{
+  --bg-dark-1:hsl(240 9 3);
+  --bg-dark-2:hsl(240 4 7);
+  --bg-dark-3:hsl(240 3 11);
+  --text-dark:hsl(240 3 96);
+  --text-dark-2:hsl(240 2 50);
+  --text-dark-muted:hsl(240 2 18);
+}
+
+/* Palette LIGHT (réservoir pour le basculement) */
+:root{
+  --bg-light-1:hsl(240 1 96);
+  --bg-light-2:hsl(240 0 91);
+  --bg-light-3:hsl(240 2 86);
+  --text-light:hsl(240 3 11);
+  --text-light-2:hsl(240 2 50);
+  --text-light-muted:hsl(240 2 80);
+}
+/* Masquer la barre native (page) */
+html {
+  scrollbar-width: none;             /* Firefox */
+}
+html::-webkit-scrollbar {
+  display: none;                     /* Chrome/Edge/Safari */
+}
+
+/* Overlay custom */
+#custom-scrollbar{
+  position: fixed;
+  right: 16px;
+  top: 1vh;
+  bottom: 1vh;                      /* hauteur de rail = 80% de la hauteur d’écran */
+  width: 6px;
+  background: transparent;           /* ou var(--bg-dark-3) si tu veux un rail visible */
+  z-index: 9999;
+  pointer-events: none;              /* clics “traversent” le rail, on remet sur le thumb */
+}
+#custom-thumb{
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 40px;                      /* sera recalculé en JS */
+  background: var(--text-dark-muted);
+  border-radius: 9999px;             /* ← arrondi total */
+  pointer-events: auto;              /* pour pouvoir drag si tu veux plus tard */
+  transition: background .2s;
+}
+#custom-thumb:hover{
+  background: var(--text-dark-2);
+}
+@media (max-width: 639px){
+  #custom-scrollbar{ display:none; } /* optionnel: pas de barre custom sur mobile */
+}
+
+/* Appliquer les variables de la palette DARK partout */
+body {
+  background: var(--bg-dark-1);
+  color: var(--text-dark);
+  transition: background 0.3s, color 0.3s;
+  font-family: var(--ff-base);
+}
+
+/* SWITCH (colors also based on DARK palette) */
+.theme-switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 26px;
+}
+.theme-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.slider {
+  position: absolute;
+  inset: 0;
+  cursor: pointer;
+  background-color: var(--text-dark-muted);
+  transition: 0.4s;
+  border-radius: 34px;
+}
+.slider::before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 3px;
+  bottom: 3px;
+  background-color: var(--bg-dark-1);
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: var(--bg-dark-3);
+}
+input:checked + .slider::before {
+  transform: translateX(24px);
+}
+
+/* SIDEBAR FIXE */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 25%;
+  height: 100vh;
+  background: var(--bg-dark-2);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  text-transform: uppercase;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+
+.about{
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+    color: var(--text-dark-muted);
+    text-decoration: none;
+}
+.about a{
+  color: var(--text-dark-muted);
+}
+
+
+.sidebar .logo-icon {
+  display: inline-block;
+}
+
+.sidebar a {
+  text-decoration: none;
+  font-family: var(--ff-base);
+  font-weight: var(--fw-medium);
+  text-transform: uppercase;
+}
+
+.menu_page{
+    color: var(--text-dark-2);
+    margin: 0.25rem 0;
+}
+
+.menu_page:hover {
+  background-color: var(--accent-color);
+}
+.logo-icon{
+    fill: currentColor;
+    color: var(--text-dark);
+}
+
+/* Décaler le contenu principal */
+.content {
+  margin-left: 25%; /* même largeur que la sidebar */
+  padding: 2rem;
+}
+/* ===== Sidebar (desktop visible, mobile cachée) ===== */
+@media (max-width: 639px){
+  .sidebar{ display: none; }
+  .content{ margin-left: 0; }
+}
+
+
+
+
+* { box-sizing: border-box; }
+[hidden]{ display:none !important; }
+.no-scroll{ overflow: hidden; }
+
+/* ===== Burger (mobile) ===== */
+.burger{
+  position: fixed; top:16px; right:16px;
+  width:44px; height:44px;
+  background: transparent; border:0; padding:0;
+  z-index:1100; cursor:pointer;
+  display:none; align-items:center; justify-content:center; flex-direction:column; gap:6px;
+  line-height:0; touch-action:manipulation; -webkit-tap-highlight-color:transparent;
+}
+@media (max-width: 639px){ .burger{ display:flex; } }
+
+.burger-line{
+  width:26px; height:2px; background:var(--text-dark);
+  border-radius:2px; transition: transform .25s ease, opacity .2s ease;
+}
+/* morph en croix */
+.burger.is-open .burger-line:nth-child(1){ transform: translateY(8px) rotate(45deg); }
+.burger.is-open .burger-line:nth-child(2){ opacity:0; }
+.burger.is-open .burger-line:nth-child(3){ transform: translateY(-8px) rotate(-45deg); }
+
+/* ===== Overlay plein écran + fondu ===== */
+.mobile-menu{
+  position: fixed; inset:0; z-index:1099;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding:
+    max(80px, env(safe-area-inset-top))
+    max(16px, env(safe-area-inset-right))
+    max(24px, env(safe-area-inset-bottom))
+    max(16px, env(safe-area-inset-left));
+
+  background: var(--bg-dark-1);
+  overflow: hidden;
+}
+
+/* Accessibilité */
+.sr-only{
+  position:absolute !important;
+  width:1px; height:1px; padding:0; margin:-1px;
+  overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
+}
+
+/* Bloc logo en haut du menu */
+.logomobile{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding: 32px 0 24px;
+}
+
+/* Le logo “plein” via mask, coloré par background = var(--text-dark) */
+.logo-mark{
+  display:block;
+  width: min(220px, 65vw);       /* ajuste la taille ici */
+  /* ratio H = W * (605 / 1643.41) → ~0.368 */
+  height: calc(min(220px, 65vw) * 0.368);
+  background: var(--text-dark);  /* ⬅️ couleur du logo (dynamique) */
+
+  /* masque depuis le fichier vectoriel */
+  -webkit-mask: url('/assets/logo.svg') no-repeat center / contain;
+          mask: url('/assets/logo.svg') no-repeat center / contain;
+}
+
+/* Liens du menu (lisibles sur overlay sombre) */
+.mobile-menu-list a{
+  color: var(--text-dark);
+}
+
+.mobile-menu-list{
+flex: 1;
+display: flex;
+flex-direction: column;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  align-items: center;
+  gap: 20px;
+  margin: 0;
+  padding: 0;
+overflow-y: auto;
+scrollbar-width: none;
+-ms-overflow-style: none;
+}
+
+.mobile-menu-list::-webkit-scrollbar{
+  display: none;
+}
+.mobile-menu-list a{
+  text-decoration: none;
+}
+.foot_menu_mobile{
+  display: flex;
+  justify-content: center;
+  height: auto;
+  padding-top: 2rem;
+
+}
+.foot_menu_mobile .about{
+  margin: 0;
+  line-height: 1;
+}
+
+
+
+/*=== showreel=== */
+#home{
+    color: var(--text-dark-2);
+}
+.highlight{
+    color: var(--text-dark);
+}
+
+/* === showreel === */
+.video-wrapper{
+    width: auto;
+    aspect-ratio: 16 / 9;
+    position: relative;
+}
+.video-iframe{
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.video-iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.tap-catcher {
+  position: absolute;
+  inset: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+.video-wrapper.is-fs .tap-catcher{ display:none; }
+
+@media (min-width: 640px){
+  .tap-catcher{display: none;}
+}
+/*=== gallerie === */
+.gallery{
+    margin-top: 2vh;
+}
+.wrapper{
+	text-align: center;
+    color: aliceblue;
+    display: grid;
+    margin: 0 auto;
+    max-width: 100%;
+    grid-template-columns: repeat(4,1fr);
+    grid-auto-rows: minmax(100px, auto);
+    grid-gap: 20px;
+}
+.wrapper div{
+    position:relative;
+    border-radius: 2px;
+}
+.wrapper a{
+    justify-content: center;
+    align-items: center;
+    text-transform: capitalize;
+    color: var(--text-dark);
+}
+.wrapper p{
+    position: absolute;
+    margin: 0;
+    padding: 0;
+	z-index: 1;
+    place-items: center;
+    font-size: clamp(10px, 4vw + 1rem, 15px);
+    text-transform: uppercase;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    opacity: 0;
+    transition: opacity .3s;
+}
+.card{
+    position: relative;
+    overflow: hidden;
+    transition:color .3s;
+    width: 100%;
+    background-color: var(--bg-dark-1);
+}
+
+.wrapper img{
+    display: block;
+    width: 100%;
+    height: 100%;
+    z-index:0;
+    transition:opacity .3s;
+    margin: 0;
+    padding: 0;
+    object-fit: cover;
+}
+.card:hover p{
+  opacity: 1;
+}
+.card:hover img{
+  opacity: .007;
+}
+.grid1{
+	grid-column: 1/3;
+}
+.grid1 > div {
+  height:100%;
+}
+.grid1 img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+
+.grid2{
+	grid-column: 1/3;
+    grid-row: 2;
+}
+.grid3{
+	grid-column: 3/5;
+    grid-row: 1;
+}
+.grid4{
+    grid-row: 2/4;
+}
+.grid4 > div {
+  height: 100%;
+}
+.grid4 img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.grid5{
+	grid-column: 1/3;
+    grid-row: 3;
+}
+
+@media (max-width: 639px) {
+  .wrapper {
+    grid-template-columns: 1fr;   /* une seule colonne */
+    grid-auto-rows: auto;
+  }
+   .grid1 {
+    aspect-ratio:16/9;
+    background:#000;
+  }
+
+  /* Réinitialiser les spans de colonnes/rows */
+  .grid1,
+  .grid2,
+  .grid3,
+  .grid4,
+  .grid5 {
+    grid-column: auto;
+    grid-row: auto;
+  }
+}
+
+/* === carousel paysage === */
+.gallery-wrapper { 
+  max-width: auto; 
+  margin: 0 auto; 
+} 
+.topbar{ 
+  display: flex; 
+} 
+.main-slider { 
+  cursor: pointer; 
+} 
+.main-slider img { 
+  width: 100%; 
+  display: block; 
+} 
+.thumb-slider { 
+  margin-top: 1rem; 
+} 
+.thumb-slider img { 
+  width: 100%; 
+  opacity: .5; 
+  cursor: pointer; 
+} 
+.thumb-slider .swiper-slide-thumb-active img { 
+  opacity: 1; 
+} 
+.prev, .next { 
+  cursor:pointer; 
+} 
+.prev { 
+  left:20px; 
+} 
+.next { 
+  right:20px; 
+} 
+.counter { 
+  position:absolute; 
+  top:10px; 
+  left:20px; 
+} 
+.prev, .next, .counter { z-index: 10; } 
+.topbar{ color: var(--text-dark-muted); } 
+.top-counter { 
+  font-size: 0.9rem; 
+  color: var(--text-dark-2); 
+} 
+.topbar div{ margin-right: .5rem; } 
+.next:hover{ color: var(--text-dark-2); } 
+.prev:hover{ color: var(--text-dark-2); }
+
+
+/* === carousel paysage mobile ===*/
+/* Mobile: on neutralise Swiper pour la galerie principale */
+@media (max-width: 639px){
+  .thumb-slider{ display:none; }              /* on vire les miniatures */
+
+  .main-slider{
+    height: auto !important;
+    overflow: visible !important;
+  }
+  .main-slider .swiper-wrapper{
+    display: block !important;                /* plus de flex/transform Swiper */
+    transform: none !important;
+  }
+  .main-slider .swiper-slide{
+    width: 100% !important;
+    height: auto !important;
+    margin: 0 0 16px 0;                       /* espace entre images */
+  }
+  .main-slider img{
+    display:block;
+    width: 100%;
+    height: auto;
+  }
+}
+@media (max-width: 639px){
+  .thumb-slider{ display: none !important; }
+  /* si un wrapper autour crée un espace : */
+  .thumb-slider, .thumb-slider *{
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+}
+
+
+/* Desktop par défaut: Swiper garde la main */
+@media (min-width: 640px){
+  .main-slider{ height: 100%; }
+  .main-slider img{ width:100%; height:auto; display:block; }
+}
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.95);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.lightbox img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.lightbox[hidden] {
+  display: none;
+}
+
+
+
+/* === carousel portrait === */
+/* conteneur global */
+/* Une galerie = un bloc qui s'ajuste à son contenu (topbar + grid) */
+.portrait-gallery{
+  --maxH: min(80vh, 900px);
+  --ratio: 9/16;                /* portrait; adapte si besoin */
+  display: inline-grid;         /* pour shrink-wrap + topbar largeur 100% */
+  grid-template-rows: auto auto;
+  width: max-content;           /* largeur = contenu */
+  color: var(--text-dark-muted);
+}
+
+
+.topbar{
+  display: flex;
+  justify-content: flex-start; /* aligne à gauche */
+  gap: .5rem;                  /* petit espace entre les éléments */
+  margin-bottom: 8px;          /* espace entre la topbar et le carousel */
+  color: var(--text-dark-muted);
+}
+
+
+/* Grille: main (colonne auto) + thumbs (colonne fixe) */
+.portrait-grid{
+  display: grid;
+  grid-template-columns: max-content 120px;
+  gap: 12px;
+  align-items: start;
+  justify-items: start;
+}
+
+/* Wrapper dimensionné par ratio -> Swiper rempli 100% de ce wrapper */
+.main-box{
+  height: var(--maxH);
+  width: calc(var(--maxH) * var(--ratio));  /* ← largeur = hauteur × ratio */
+  background: var(--bg-dark-1);
+  overflow: hidden;
+}
+
+/* Très important: le Swiper prend 100% du wrapper, pas de width calculée ici */
+.main-slider{
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  cursor: pointer;
+}
+.main-slider .swiper-slide{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.main-slider img{
+  height: 100%;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/* Thumbs verticales */
+.thumb-slider-vert{
+  height: var(--maxH);
+  width: 120px;
+  overflow: hidden;
+}
+.thumb-slider-vert .swiper-slide{
+  overflow: hidden;
+}
+.thumb-slider-vert img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: .55;
+  transition: opacity .2s;
+  display: block;
+  cursor: pointer;
+}
+.thumb-slider-vert .swiper-slide-thumb-active img{
+  opacity: 1;
+}
+
+/* Conteneur pour 2+ galeries côte à côte */
+.galleries{
+  display: flex;
+  gap: 32px;
+  justify-content: center;      /* centre l'ensemble */
+  align-items: flex-start;
+  flex-wrap: wrap;              /* passe en ligne suivante si ça ne tient pas */
+}
+
+/* Mobile: thumbs sous l'image si tu veux */
+@media (max-width: 639px){
+  .portrait-gallery{ --maxH: 65vh; }
+  .portrait-grid{ grid-template-columns: 1fr; }
+  .main-box{ width: min(100%, calc(var(--maxH) * var(--ratio))); }
+  .thumb-slider-vert{ height: auto; width: 100%; margin-top: 10px; }
+  .thumb-slider-vert .swiper-slide{ height: 80px; }
+  .topbar{display: none;}
+}
+
+
+/*=== projet === */
+
+.Video{
+    background-color: var(--bg-dark-1);
+    margin-top: 3em;
+}
+.credits{
+    color: var(--text-dark-2);
+}
+.credits h1{
+    text-transform: uppercase;
+    font-size: 15px;
+    font-weight: var(--fw-thin);
+    margin-bottom: 2em;
+}
+.credits p{
+    font-weight: var(--fw-thin);
+
+}
+.credits h2{
+    font-weight: var(--fw-medium);
+    font-size: 15px;
+    margin-top: 5em;
+}
+.title{
+    text-transform: uppercase;
+    font-weight: var(--fw-thin);
+    font-size: 26px;
+
+}

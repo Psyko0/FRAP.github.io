@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet">
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+/>
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+</head>
+
+<script>
+  fetch('partials/Menu_sidebar.html')
+    .then(response => response.text())
+    .then(html => {
+      document.getElementById('sidebar-placeholder').innerHTML = html;
+    });
+    fetch('partials/custom_scrollbar.html')
+      .then(res => res.text())
+      .then(html => document.getElementById('scrollbar-placeholder').innerHTML = html);
+</script>
+<body>
+  <div id="scrollbar-placeholder"></div>
+    <div id="sidebar-placeholder"></div>
+    <div class="content">
+      <div class="title">Cubism</div>
+<div class="galleries">
+      <div class="portrait-gallery">
+  <div class="topbar">
+    <span class="prev">Previous</span>
+    <span>/</span>
+    <span class="next">Next image</span>
+  </div>
+
+  <div class="portrait-grid">
+    <!-- Colonne main -->
+    <div class="main-box">
+      <div class="swiper main-slider">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide"><img src="assets/Cubism/VS--Cubism-0’00”.jpg" alt=""></div>
+          <div class="swiper-slide"><img src="assets/Cubism/VS--Cubism-0’01”.jpg" alt=""></div>
+          <div class="swiper-slide"><img src="assets/Cubism/VS--Cubism-0’02”.jpg" alt=""></div>
+          <div class="swiper-slide"><img src="assets/Cubism/VS--Cubism-0’06”.jpg" alt=""></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Colonne thumbs -->
+    <div class="swiper thumb-slider-vert">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide"><img src="assets/Cubism/VS--Cubism-0’00”.jpg" alt=""></div>
+        <div class="swiper-slide"><img src="assets/Cubism/VS--Cubism-0’01”.jpg" alt=""></div>
+        <div class="swiper-slide"><img src="assets/Cubism/VS--Cubism-0’02”.jpg" alt=""></div>
+        <div class="swiper-slide"><img src="assets/Cubism/VS--Cubism-0’06”.jpg" alt=""></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+<!-- Lightbox globale -->
+<div id="lightbox" class="lightbox" hidden>
+  <img id="lightbox-img" src="" alt="fullscreen image">
+</div>
+
+
+
+
+
+<section class="Video">
+  <div class="video-wrapper">
+    <iframe
+      src="https://player.vimeo.com/video/1111407277?autoplay=1&loop=1&muted=1&controls=0&title=0&byline=0&portrait=0&badge=0&autopause=0"
+      class="video-iframe"
+      width="100%"
+      height="auto"
+      frameborder="0"
+      allow="autoplay; fullscreen; picture-in-picture"
+      allowfullscreen
+      title="Showreel 2025">
+    </iframe>
+  </div>
+</section>
+
+
+
+<section class="credits">
+  <h1>credits</h1>
+  <p>Client: MJM Design</p>
+  <p>Director: Olivier Bonenfant</p>
+  <p>Design & Visual Research: Florent Aupeix</p>
+  <p>Lighter: Florent Aupeix</p>
+  <p>3D Artist: Florent Aupeix</p>
+  <h2>October 2024</h2>
+</section>
+
+
+
+
+    </div>
+
+<script src="https://player.vimeo.com/api/player.js"></script>
+<script>
+  const iframe = document.querySelector('.video-iframe');
+  const player = new Vimeo.Player(iframe);
+
+  // Observer pour détecter quand la vidéo est visible
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        player.play();
+      } else {
+        player.pause();
+      }
+    });
+  }, { threshold: .8 }); // 0.5 = la moitié de la vidéo doit être visible
+
+  observer.observe(iframe);
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const root = document.querySelector(".portrait-gallery");
+  if (!root) return;
+
+  // 1) scope sélecteurs à la galerie
+  const mainSel   = ".portrait-gallery .main-slider";
+  const thumbsSel = ".portrait-gallery .thumb-slider-vert";
+  const prevBtn   = root.querySelector(".prev");
+  const nextBtn   = root.querySelector(".next");
+
+  const totalSlides = root.querySelectorAll(".main-slider .swiper-slide").length;
+
+  // 2) thumbs verticaux (observeParents pour recalculs)
+  const thumbs = new Swiper(thumbsSel, {
+    direction: "vertical",
+    slidesPerView: totalSlides, // toutes visibles en même temps
+
+    spaceBetween: 10,
+    freeMode: true,
+    watchSlidesProgress: true,
+    observer: true,
+    observeParents: true,
+  });
+
+  // 3) main (loop + thumbs) + observeParents
+  const mainSlider = new Swiper(mainSel, {
+    loop: true,
+    loopedSlides: totalSlides,
+    slidesPerView: 1,
+    spaceBetween: 0,
+    observer: true,
+    observeParents: true,
+    thumbs: { swiper: thumbs },
+    on: {
+      // si tu as un compteur: mets à jour ici
+      // slideChange() { ... }
+    }
+  });
+
+  // 4) nécessaire quand on combine loop + thumbs
+  mainSlider.thumbs.swiper = thumbs;
+  mainSlider.thumbs.init();
+  mainSlider.thumbs.update();
+
+  // 5) interactions
+  root.querySelector(".main-slider").addEventListener("click", () => {
+    mainSlider.slideNext();
+  });
+  prevBtn && prevBtn.addEventListener("click", () => mainSlider.slidePrev());
+  nextBtn && nextBtn.addEventListener("click", () => mainSlider.slideNext());
+});
+</script>
+
+
+
+
+
+
+
+    <script src="script.js"></script>
+        <!-- Menu Mobile-->
+    <script defer src="/js/script-mobile.js"></script>
+<script defer>
+  (async () => {
+    const [sidebarHtml, scrollbarHtml] = await Promise.all([
+      fetch('partials/Menu_sidebar.html').then(r => r.text()),
+      fetch('partials/custom_scrollbar.html').then(r => r.text()),
+    ]);
+    document.getElementById('sidebar-placeholder').innerHTML = sidebarHtml;
+    document.getElementById('scrollbar-placeholder').innerHTML = scrollbarHtml;
+
+    // IMPORTANT : initialiser après injection (sécurisé, idempotent)
+    window.initMobileMenu();
+  })();
+</script>
+</body>
+</html>
