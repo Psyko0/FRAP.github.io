@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portfolio</title>
+    <base href="../">
     <link rel="stylesheet" href="./styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,21 +26,12 @@
 
 </head>
 
-<script>
-  fetch('partials/Menu_sidebar.html')
-    .then(response => response.text())
-    .then(html => {
-      document.getElementById('sidebar-placeholder').innerHTML = html;
-    });
-    fetch('partials/custom_scrollbar.html')
-      .then(res => res.text())
-      .then(html => document.getElementById('scrollbar-placeholder').innerHTML = html);
-</script>
+
 <body>
   <div id="scrollbar-placeholder"></div>
     <div id="sidebar-placeholder"></div>
     <div class="content">
-      <div class="title">Elevate can</div>
+      <div class="title">Electro Stimulation</div>
         <div class="gallery-wrapper">
           <!-- TOP COUNTER -->
            <div class="topbar">
@@ -52,12 +44,12 @@
   <!-- Main slider -->
   <div class="swiper main-slider">
     <div class="swiper-wrapper">
-      <div class="swiper-slide"><img src="assets/Elevate Can/VS--ElevateCan-0’00”.jpg" /></div>
-      <div class="swiper-slide"><img src="assets/Elevate Can/VS--ElevateCan-0’02”.jpg" /></div>
-      <div class="swiper-slide"><img src="assets/Elevate Can/VS--ElevateCan-0’15”.jpg" /></div>
-      <div class="swiper-slide"><img src="assets/Elevate Can/VS--ElevateCan-0’16”.jpg" /></div>
-      <div class="swiper-slide"><img src="assets/Elevate Can/VS--ElevateCan-0’20”.jpg" /></div>
-      <div class="swiper-slide"><img src="assets/Elevate Can/VS--ElevateCan-0’27”.jpg" /></div>
+      <div class="swiper-slide"><img src="assets/Electro Stim/VS--ElectroStimulation-0’02”.jpg" /></div>
+      <div class="swiper-slide"><img src="assets/Electro Stim/VS--ElectroStimulation-0’03”.jpg" /></div>
+      <div class="swiper-slide"><img src="assets/Electro Stim/VS--ElectroStimulation-0’04”.jpg" /></div>
+      <div class="swiper-slide"><img src="assets/Electro Stim/VS--ElectroStimulation-0’05”.jpg" /></div>
+      <div class="swiper-slide"><img src="assets/Electro Stim/VS--ElectroStimulation-0’10”.jpg" /></div>
+      <div class="swiper-slide"><img src="assets/Electro Stim/VS--ElectroStimulation-0’12”.jpg" /></div>
     </div>
     
     
@@ -68,12 +60,12 @@
   <!-- Thumbnails -->
   <div class="swiper thumb-slider">
     <div class="swiper-wrapper">
-      <div class="swiper-slide"><img src="assets/Elevate Can/VS--ElevateCan-0’00”.jpg" /></div>
-      <div class="swiper-slide"><img src="assets/Elevate Can/VS--ElevateCan-0’02”.jpg" /></div>
-      <div class="swiper-slide"><img src="assets/Elevate Can/VS--ElevateCan-0’15”.jpg" /></div>
-      <div class="swiper-slide"><img src="assets/Elevate Can/VS--ElevateCan-0’16”.jpg" /></div>
-      <div class="swiper-slide"><img src="assets/Elevate Can/VS--ElevateCan-0’20”.jpg" /></div>
-      <div class="swiper-slide"><img src="assets/Elevate Can/VS--ElevateCan-0’27”.jpg" /></div>
+      <div class="swiper-slide"><img src="assets/Electro Stim/VS--ElectroStimulation-0’02”.jpg" /></div>
+      <div class="swiper-slide"><img src="assets/Electro Stim/VS--ElectroStimulation-0’03”.jpg" /></div>
+      <div class="swiper-slide"><img src="assets/Electro Stim/VS--ElectroStimulation-0’04”.jpg" /></div>
+      <div class="swiper-slide"><img src="assets/Electro Stim/VS--ElectroStimulation-0’05”.jpg" /></div>
+      <div class="swiper-slide"><img src="assets/Electro Stim/VS--ElectroStimulation-0’10”.jpg" /></div>
+      <div class="swiper-slide"><img src="assets/Electro Stim/VS--ElectroStimulation-0’12”.jpg" /></div>
     </div>
   </div>
 
@@ -88,7 +80,7 @@
 <section class="Video">
     <div class="video-wrapper">
   <iframe
-    src="https://player.vimeo.com/video/1111396897?title=0&amp;byline=0&amp;portrait=0&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
+    src="https://player.vimeo.com/video/1111393218?title=0&amp;byline=0&amp;portrait=0&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
     class="video-iframe"
     width="100%"
     height="auto"
@@ -103,15 +95,15 @@
 <section class="credits">
   <h1>credits</h1>
   <p>Client: MJM Design</p>
-  <p>Director: Julie Pierre</p>
+  <p>Director: Olivié Charbonneau</p>
   <p>Design & Visual Research: Florent Aupeix</p>
   <p>Storyboard Artist: Florent Aupeix</p>
   <p>Lighter: Florent Aupeix</p>
   <p>Animator / Compositor: Florent Aupeix</p>
   <p>CG: Florent Aupeix</p>
   <p>3D Artist: Florent Aupeix</p>
-  <p>Special Thanks to Lucas Bour</p>
-  <h2>May 2025</h2>
+  <p>Special Thanks to Valentin Saury</p>
+  <h2>December 2024</h2>
 </section>
 
 
@@ -158,21 +150,30 @@ document.querySelector(".main-slider").addEventListener("click", () => {
 
 
 
-    <script src="./script.js"></script>
+    
         <!-- Menu Mobile-->
     <script defer src="js/script-mobile.js"></script>
 <script defer>
   (async () => {
-    const [sidebarHtml, scrollbarHtml] = await Promise.all([
-      fetch('partials/Menu_sidebar.html').then(r => r.text()),
-      fetch('partials/custom_scrollbar.html').then(r => r.text()),
-    ]);
-    document.getElementById('sidebar-placeholder').innerHTML = sidebarHtml;
-    document.getElementById('scrollbar-placeholder').innerHTML = scrollbarHtml;
+    try {
+      const [sidebarHtml, scrollbarHtml] = await Promise.all([
+        fetch('partials/Menu_sidebar.html').then(r => r.text()),
+        fetch('partials/custom_scrollbar.html').then(r => r.text()),
+      ]);
+      document.getElementById('sidebar-placeholder').innerHTML = sidebarHtml;
+      document.getElementById('scrollbar-placeholder').innerHTML = scrollbarHtml;
 
-    // IMPORTANT : initialiser après injection (sécurisé, idempotent)
-    window.initMobileMenu();
+      // Rebranche le switch thème sur le NOUVEAU DOM
+      window.__theme?.syncThemeToggle();
+
+      // Init menu mobile
+      window.initMobileMenu?.();
+      window.initCustomScrollbar?.();
+    } catch (e) {
+      console.error('Partial injection failed:', e);
+    }
   })();
 </script>
+<script src="./script.js"></script>
 </body>
 </html>

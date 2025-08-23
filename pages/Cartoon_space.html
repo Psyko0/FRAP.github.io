@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portfolio</title>
+    <base href="../">
     <link rel="stylesheet" href="./styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,16 +26,7 @@
 
 </head>
 
-<script>
-  fetch('partials/Menu_sidebar.html')
-    .then(response => response.text())
-    .then(html => {
-      document.getElementById('sidebar-placeholder').innerHTML = html;
-    });
-    fetch('partials/custom_scrollbar.html')
-      .then(res => res.text())
-      .then(html => document.getElementById('scrollbar-placeholder').innerHTML = html);
-</script>
+
 <body>
   <div id="scrollbar-placeholder"></div>
     <div id="sidebar-placeholder"></div>
@@ -173,21 +165,30 @@ document.querySelector(".main-slider").addEventListener("click", () => {
 
 
 
-    <script src="./script.js"></script>
+    
         <!-- Menu Mobile-->
     <script defer src="js/script-mobile.js"></script>
 <script defer>
   (async () => {
-    const [sidebarHtml, scrollbarHtml] = await Promise.all([
-      fetch('partials/Menu_sidebar.html').then(r => r.text()),
-      fetch('partials/custom_scrollbar.html').then(r => r.text()),
-    ]);
-    document.getElementById('sidebar-placeholder').innerHTML = sidebarHtml;
-    document.getElementById('scrollbar-placeholder').innerHTML = scrollbarHtml;
+    try {
+      const [sidebarHtml, scrollbarHtml] = await Promise.all([
+        fetch('partials/Menu_sidebar.html').then(r => r.text()),
+        fetch('partials/custom_scrollbar.html').then(r => r.text()),
+      ]);
+      document.getElementById('sidebar-placeholder').innerHTML = sidebarHtml;
+      document.getElementById('scrollbar-placeholder').innerHTML = scrollbarHtml;
 
-    // IMPORTANT : initialiser après injection (sécurisé, idempotent)
-    window.initMobileMenu();
+      // Rebranche le switch thème sur le NOUVEAU DOM
+      window.__theme?.syncThemeToggle();
+
+      // Init menu mobile
+      window.initMobileMenu?.();
+      window.initCustomScrollbar?.();
+    } catch (e) {
+      console.error('Partial injection failed:', e);
+    }
   })();
 </script>
+<script src="./script.js"></script>
 </body>
 </html>
